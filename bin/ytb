@@ -1,0 +1,21 @@
+#!/bin/bash
+
+function dl() {
+  yid=${1:-}
+  fp=$(endir)/'%(title)s.%(ext)s'
+  echo $fp
+  youtube-dl $yid -o $fp -x \
+    --audio-format mp3 --audio-quality 320k
+}
+
+function endir() {
+  dir=$(date +%y)q$(( ($(date +%-m)-1)/3+1 ))
+  echo $dir
+}
+
+mkdir -p endir
+
+yid=${1:-}
+
+dl $yid
+
