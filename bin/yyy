@@ -3,8 +3,7 @@
 function dl() {
   yid=${1:-}
   fp=$(endir)/'%(title)s.%(ext)s'
-  echo $fp
-  youtube-dl $yid -o $fp -x \
+  youtube-dl "$yid" -o $fp -x \
     --audio-format mp3 --audio-quality 320k
 }
 
