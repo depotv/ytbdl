@@ -2,8 +2,10 @@
 
 function dl() {
   yid=${1:-}
+  fn=${2:-}
   fp=$(endir)/'%(title)s.%(ext)s'
-  youtube-dl "$yid" -o $fp -x \
+  # fp=$(endir)/$fn.mp3
+  youtube-dl "$yid" -i -o "$fp" -x \
     --audio-format mp3 --audio-quality 320k
 }
 
@@ -15,6 +17,7 @@ function endir() {
 mkdir -p endir
 
 yid=${1:-}
+f=${2:-}
 
-dl $yid
+dl $yid "${f}"
 
