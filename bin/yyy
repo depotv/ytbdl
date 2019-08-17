@@ -5,8 +5,11 @@ function dl() {
   fn=${2:-}
   fp=$(endir)/'%(title)s.%(ext)s'
   # fp=$(endir)/$fn.mp3
-  youtube-dl "$yid" -i -o "$fp" -x \
-    --audio-format mp3 --audio-quality 320k
+  youtube-dl "$yid" -i -x \
+    -o "$fp" \
+    --audio-format mp3 \
+    --audio-quality 320k \
+    --add-metadata
 }
 
 function endir() {

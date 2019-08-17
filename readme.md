@@ -14,3 +14,32 @@
 ```
 
   - add tsc/dev/prod command in package.json script part
+
+# libs
+
+  * dev:
+    - dev's playground
+  * samples:
+    - batchMetaFiler
+  * batchMetaFiler:
+    - each file in dir
+      - metaLoader
+      - filer
+  * metaLoader:
+    - get meta
+    - login(once)
+      - configurable token
+    - empty title
+      - query by file name
+    - non empty title
+      - query by artist/title field
+    - chinese GB/BIG5 -> UTF8
+  * filer:
+    - get title from meta(pass in)
+    - if title parsed
+      - write other meta back
+      - re-org: move/rename file
+    - if title not parsed
+      - keep, notice user to adjust it
+      
+

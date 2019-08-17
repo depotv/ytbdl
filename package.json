@@ -4,7 +4,7 @@
   "description": "```   youtube-dl nEpF6ISYdM0 -o 'test.%(ext)s' -x --audio-format mp3 --audio-quality 320k ```",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpileOnly ./lib/tag.ts",
+    "dev": "ts-node-dev --respawn --transpileOnly ./lib/dev.ts",
     "prod": "tsc && node ./build/tag.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -13,6 +13,8 @@
   "dependencies": {
     "node-id3": "^0.1.11",
     "ts-node-dev": "^1.0.0-pre.40",
-    "typescript": "^3.5.3"
+    "typescript": "^3.5.3",
+    "unirest": "^0.6.0",
+    "yaml": "^1.6.0"
   }
 }
