@@ -19,22 +19,22 @@
 
   * dev:
     - dev's playground
-  * samples:
+  * [x] samples:
     - batchMetaFiler
-  * batchMetaFiler:
+  * [x] batchMetaFiler:
     - each file in dir
       - metaLoader
       - filer
-  * metaLoader:
-    - get meta
-    - login(once)
+  * [ ] metaLoader:
+    - [ ] get meta
+    - [x] login(once)
       - configurable token
-    - empty title
+    - [ ] empty title
       - query by file name
-    - non empty title
+    - [ ] non empty title
       - query by artist/title field
-    - chinese GB/BIG5 -> UTF8
-  * filer:
+    - [ ] chinese GB/BIG5 -> UTF8
+  * [ ] filer:
     - get title from meta(pass in)
     - if title parsed
       - write other meta back

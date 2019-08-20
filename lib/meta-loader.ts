@@ -1,41 +1,87 @@
-import { create, write, read } from 'node-id3';
-import * as apiClient from 'unirest';
-//import { Track } from './model';
-//import { logId3Tags } from './utils';
+import { MetaFilerConfig } from './meta-filer.config';
+import { Track } from './model';
+
+const tag3 = require('node-id3');
+const apiClient = require('unirest');
 
 export class MetaLoader {
   meta = {};
-  constructor(private fp) {}
-  login(client_id, client_secret) {
+  apiToken = '';
+  constructor(private cfg: MetaFilerConfig) {}
+  async init() {
+    const t: any = await this.login();
+    const { access_token: at, token_type: tt } = t;
+    this.apiToken = [tt, at].join(' ');
+  }
+  login() {
     return new Promise((d, r) => {
       apiClient
         .post('https://accounts.spotify.com/api/token')
         .type('x-www-form-urlencoded')
         .send({
           grant_type: 'client_credentials',
-          client_id, client_secret
+          client_id: this.cfg.cliKey,
+          client_secret: this.cfg.cliToken
         })
         .end(r => {
           d(r.toJSON().body);
         });
     });
   }
-
-  dump(token, q) {
-    return new Promise((d, r) => {
+  isEmpty(m) {
+    m = m || {};
+    return !m.title;
+  }
+  parse(fp) {
+    fp = fp.replace('|', '-')
+    const [fn, ext] = fp.split('.mp3');
+    const [at, ft] = fn.split('-');
+    const artist = ft ? at.split(/(feat.|ft.)/)[0] : '';
+    const title = (ft || at).split('(')[0];
+    return { title: title.trim(), artist: artist.trim() };
+  }
+  read(f) {
+    return new Promise(r => {
+      tag3.read(this.cfg.base + '/' + f, (e, t) => {
+        r(t);
+      });
+    });
+  }
+  async dump(fp) {
+    const m: any = await this.read(fp);
+    const q: any = this.isEmpty(m) ? this.parse(fp) : m;
+    const r = this.makeQuery(q);
+    this.cfg.log('summary', 'dumping:', fp)
+    this.cfg.log('detail', q, r)
+    return this.search(r);
+  }
+  makeQuery(q) {
+    return (q.title + ['artist', 'album', 'track', 'year'].reduce((r, k) => {
+      return r + (q[k] ? ` ${k}:${q[k]}` : '');
+    }, ''));
+  }
+  search(q) {
+    return new Promise<Track>((d, r) => {
       apiClient
         .get('https://api.spotify.com/v1/search')
         .type('json')
-        .headers({ 'Authorization': token })
-        .query({ q, type: 'track', })
+        .headers({ 'Authorization': this.apiToken })
+        .query({ q, type: 'track', limit: 1 })
         .end((r) => {
           if (!r) { return; }
-          const list = r.toJSON().body.tracks;
+          let list;
+          try {
+            list = r.toJSON().body.tracks;
+          } catch(e) {
+            this.cfg.log('error', e);
+          }
           if (!list) { return; }
           const m = list.items[0];
           const t = new Track(m || { name: q });
+          this.cfg.log('debug', t)
           d(t);
         });
     });
   }
 }
+

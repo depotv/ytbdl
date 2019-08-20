@@ -21,7 +21,7 @@ export class Track {
   set artists(v) {
     if (!v) { return; }
     v = v || [];
-    this.artistsName = v.map(i => i.name).join(', ')
+    this.artistsName = v.map(i => i.name).join(', ');
   }
   artistsName: string;
   constructor(o?) {
