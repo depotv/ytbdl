@@ -2,3 +2,4 @@
 20*
 node_modules
 *.yml
+build/*

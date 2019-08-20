@@ -48,25 +48,30 @@ export class MetaLoader {
     });
   }
   async dump(fp) {
+    this.cfg.log('summary', 'dumping:', fp)
     const m: any = await this.read(fp);
     const q: any = this.isEmpty(m) ? this.parse(fp) : m;
     const r = this.makeQuery(q);
-    this.cfg.log('summary', 'dumping:', fp)
-    this.cfg.log('detail', q, r)
+    this.cfg.log('detail', 'search query:', q)
     return this.search(r);
   }
   makeQuery(q) {
+    if (this.cfg.simpleQuery) { return q.title; }
     return (q.title + ['artist', 'album', 'track', 'year'].reduce((r, k) => {
       return r + (q[k] ? ` ${k}:${q[k]}` : '');
     }, ''));
   }
   search(q) {
+    const query: any = { q, type: 'track', limit: 1 };
+    if (this.cfg.market) {
+      query.market = this.cfg.market;
+    }
     return new Promise<Track>((d, r) => {
       apiClient
         .get('https://api.spotify.com/v1/search')
         .type('json')
         .headers({ 'Authorization': this.apiToken })
-        .query({ q, type: 'track', limit: 1 })
+        .query(query)
         .end((r) => {
           if (!r) { return; }
           let list;
@@ -75,10 +80,12 @@ export class MetaLoader {
           } catch(e) {
             this.cfg.log('error', e);
           }
+          this.cfg.log('debug', list.href, list.items.length);
           if (!list) { return; }
           const m = list.items[0];
           const t = new Track(m || { name: q });
-          this.cfg.log('debug', t)
+          t.original = q;
+          // this.cfg.log('debug', t)
           d(t);
         });
     });

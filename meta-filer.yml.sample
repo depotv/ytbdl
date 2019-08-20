@@ -1,6 +1,8 @@
 # base: ''
 # use  0,     1,   10,     100,   1000, 10000
 # for no, error, warn, summary, detail, debug
+dryRun: true
+simpleQuery: true
 verbose: 10000
 cliKey: 
 cliToken: 

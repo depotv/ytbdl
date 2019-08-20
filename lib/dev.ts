@@ -5,3 +5,5 @@ const cfg = new MetaFilerConfig('./meta-filer.yml');
 const bmf = new BatchMetaFiler(cfg);
 bmf.process();
 
+//bmf.process(16);
+

@@ -1,5 +1,6 @@
 const keys = ['name', 'track_number', 'disc_number', 'album', 'artists'];
 export class Track {
+  original: string;
   name: string;
   set track_number(v) {
     this.trackNumber = v;
@@ -24,6 +25,24 @@ export class Track {
     this.artistsName = v.map(i => i.name).join(', ');
   }
   artistsName: string;
+  get fileName() {
+    return `${this.trackNumber}_${this.name}.mp3`;
+  }
+  get incomplete() {
+    return !this.trackNumber;
+  }
+  get id3Tags() {
+    return {
+      title: this.name,
+      trackNumber: `${this.trackNumber}/${this.totalTracks}`,
+      partOfSet: `${this.discNumber}`,
+      album: this.albumName,
+      artist: this.artistsName,
+      publisher: 'Youtube',
+      date: this.releaseDate,
+      comment: this.original
+    };
+  }
   constructor(o?) {
     keys.forEach(k => {
       this[k] = o[k];

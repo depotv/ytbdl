@@ -25,16 +25,16 @@
     - each file in dir
       - metaLoader
       - filer
-  * [ ] metaLoader:
-    - [ ] get meta
+  * [x] metaLoader:
+    - [x] get meta
     - [x] login(once)
       - configurable token
-    - [ ] empty title
+    - [x] empty title
       - query by file name
-    - [ ] non empty title
+    - [x] non empty title
       - query by artist/title field
     - [ ] chinese GB/BIG5 -> UTF8
-  * [ ] filer:
+  * [x] filer:
     - get title from meta(pass in)
     - if title parsed
       - write other meta back
@@ -42,4 +42,8 @@
     - if title not parsed
       - keep, notice user to adjust it
       
+# ref
+
+  - spotify api
+    * https://developer.spotify.com/console/get-search-item/?q=孤單心事&type=track&market=&limit=1&offset= 
 

@@ -22,6 +22,9 @@ export class MetaFilerConfig {
   cliKey = '';
   cliToken = '';
   verbose = 0;
+  dryRun = false;
+  simpleQuery = true;
+  market: string[];
   constructor(private dp) {
     if (existsSync(dp)) {
       const yml = parse(readFileSync(dp, 'utf8'));
